@@ -42,3 +42,6 @@ _Just install Visual Stdio IDE, open the repository on Visual Studio and start w
 ## **Contribution**
 This is a concept for beginners starting with computer networking. Feel free to fork, clone, create issues and/or make PRs. We will be more than happy to receive your contributions.
 
+
+## **Announcement**
+Not to used [**Visual Stdio Code**](https://visualstudio.microsoft.com/). Used [**Visual Studio IDE**](https://visualstudio.microsoft.com/).
