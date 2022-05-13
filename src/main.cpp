@@ -1,15 +1,34 @@
+/*************************************************************
+ * 
+ *  compile command = "g++ main.cpp -o main -lws2_32" 
+ * 
+ * 
+ * **********************************************************/
+// #define _WIN32_WINNT
+#define WINVER WindowsXP
+
 #include <iostream>
+#include<winsock2.h>
+#include<winsock.h>
 #include <WS2tcpip.h>
+#include <stdlib.h>
+#include <stdio.h>
 #pragma comment(lib, "ws2_32.lib")
 using namespace std;
+
+
+//function prototype
+
+const char *inet_ntop(int af, const void *src, char *dst, socklen_t size);
+
 int main()
 {
 
     // initialize winsock
     WSADATA wsData;
-    WORD ver = MAKEWORD(2, 2);
+    
 
-    int wsOK = WSAStartup(ver, &wsData);
+    int wsOK = WSAStartup(MAKEWORD(2, 2), &wsData);
     if (wsOK != 0)
     {
         cerr << "Can't initilised the variable! Quiting" << endl;
@@ -84,4 +103,27 @@ int main()
 
     // Cleanup winsocket
     WSACleanup();
+}
+
+const char *inet_ntop(int af, const void *src, char *dst, socklen_t size)
+{
+  struct sockaddr_storage ss;
+  unsigned long s = size;
+
+  ZeroMemory(&ss, sizeof(ss));
+  ss.ss_family = af;
+
+  switch(af) {
+    case AF_INET:
+      ((struct sockaddr_in *)&ss)->sin_addr = *(struct in_addr *)src;
+      break;
+    case AF_INET6:
+      ((struct sockaddr_in6 *)&ss)->sin6_addr = *(struct in6_addr *)src;
+      break;
+    default:
+      return NULL;
+  }
+  /* cannot direclty use &size because of strict aliasing rules */
+  return (WSAAddressToString((struct sockaddr *)&ss, sizeof(ss), NULL, dst, &s) == 0)?
+          dst : NULL;
 }
